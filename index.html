@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Focus — Trung tâm năng suất</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="csc.css">
+
+  <!-- Áp dụng theme sớm để tránh nháy màu khi tải trang -->
+  <script>
+    (function () {
+      try {
+        var saved = JSON.parse(localStorage.getItem('focus:theme'));
+        var dark = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.dataset.theme = saved || (dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Bộ icon dùng chung -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-minus" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="1.5" x2="12" y2="3.5"/><line x1="12" y1="20.5" x2="12" y2="22.5"/><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/><line x1="1.5" y1="12" x2="3.5" y2="12"/><line x1="20.5" y1="12" x2="22.5" y2="12"/><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></symbol>
+    <symbol id="i-tasks" viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><polyline points="12 9 12 13 14.5 14.5"/><line x1="9.5" y1="2.5" x2="14.5" y2="2.5"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="14 3 14 9 20 9"/><line x1="8" y1="13.5" x2="16" y2="13.5"/><line x1="8" y1="17" x2="13" y2="17"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="7 4 20 12 7 20 7 4" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/><rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></symbol>
+    <symbol id="i-skip" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4" fill="currentColor"/><line x1="19" y1="5" x2="19" y2="19"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></symbol>
+    <symbol id="i-grip" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.5"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4.1 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><polyline points="22 4 12 14 9 11"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  </svg>
+
+  <div class="app">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar" id="sidebar" aria-label="Điều hướng chính">
+      <div class="brand">
+        <span class="brand-mark"><svg class="icon"><use href="#i-target"/></svg></span>
+        <span class="brand-name">Focus</span>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-item active" data-view="tasks">
+          <svg class="icon"><use href="#i-tasks"/></svg><span>Công việc</span>
+          <span class="badge" id="navBadge">0</span>
+        </button>
+        <button class="nav-item" data-view="pomodoro">
+          <svg class="icon"><use href="#i-timer"/></svg><span>Tập trung</span>
+        </button>
+        <button class="nav-item" data-view="notes">
+          <svg class="icon"><use href="#i-note"/></svg><span>Ghi chú</span>
+        </button>
+        <button class="nav-item" data-view="insights">
+          <svg class="icon"><use href="#i-chart"/></svg><span>Thống kê</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="day-card">
+          <p class="day-title">Hôm nay</p>
+          <div class="day-row">
+            <div><strong id="dayDone">0</strong><span>việc xong</span></div>
+            <div><strong id="dayFocus">0</strong><span>phút tập trung</span></div>
+          </div>
+          <div class="day-track" title="Mục tiêu: 5 việc mỗi ngày"><div class="day-bar" id="dayBar"></div></div>
+        </div>
+        <button class="link-btn" id="resetData">Xóa toàn bộ dữ liệu</button>
+      </div>
+    </aside>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn only-mobile" id="menuBtn" aria-label="Mở menu"><svg class="icon"><use href="#i-menu"/></svg></button>
+
+        <label class="search">
+          <svg class="icon"><use href="#i-search"/></svg>
+          <input type="search" id="searchInput" placeholder="Tìm công việc…" autocomplete="off" aria-label="Tìm kiếm">
+          <kbd>/</kbd>
+        </label>
+
+        <div class="topbar-right">
+          <div class="clock" aria-live="off">
+            <strong id="clockTime">--:--</strong>
+            <span id="clockDate"></span>
+          </div>
+          <button class="icon-btn theme-btn" id="themeToggle" aria-label="Đổi giao diện sáng/tối">
+            <svg class="icon sun"><use href="#i-sun"/></svg>
+            <svg class="icon moon"><use href="#i-moon"/></svg>
+          </button>
+          <button class="btn primary" id="addBtn">
+            <svg class="icon"><use href="#i-plus"/></svg><span>Thêm việc</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ===== VIEW: CÔNG VIỆC ===== -->
+      <section class="view active" id="view-tasks">
+        <div class="page-head">
+          <h1 id="greeting">Xin chào</h1>
+          <p id="progressText">Hôm nay bạn muốn hoàn thành điều gì?</p>
+        </div>
+
+        <div class="stats">
+          <article class="card progress-card">
+            <div class="ring" aria-hidden="true">
+              <svg viewBox="0 0 80 80">
+                <circle class="ring-bg" cx="40" cy="40" r="33"/>
+                <circle class="ring-fg" id="ringFg" cx="40" cy="40" r="33"/>
+              </svg>
+              <div class="ring-label"><span id="ringPercent">0</span><small>%</small></div>
+            </div>
+            <div>
+              <h2>Tiến độ tổng</h2>
+              <p><span id="ringSub">0 / 0 việc hoàn thành</span></p>
+            </div>
+          </article>
+
+          <article class="card stat">
+            <span class="stat-ico"><svg class="icon"><use href="#i-list"/></svg></span>
+            <strong id="statTotal">0</strong><span class="stat-label">Tổng số việc</span>
+          </article>
+          <article class="card stat">
+            <span class="stat-ico ok"><svg class="icon"><use href="#i-check-circle"/></svg></span>
+            <strong id="statDone">0</strong><span class="stat-label">Đã hoàn thành</span>
+          </article>
+          <article class="card stat">
+            <span class="stat-ico warn"><svg class="icon"><use href="#i-timer"/></svg></span>
+            <strong id="statActive">0</strong><span class="stat-label">Đang chờ</span>
+          </article>
+          <article class="card stat">
+            <span class="stat-ico danger"><svg class="icon"><use href="#i-alert"/></svg></span>
+            <strong id="statOverdue">0</strong><span class="stat-label">Quá hạn</span>
+          </article>
+        </div>
+
+        <div class="toolbar">
+          <div class="seg" id="filterSeg" role="tablist" aria-label="Lọc theo trạng thái">
+            <span class="seg-indicator"></span>
+            <button class="active" data-filter="all">Tất cả</button>
+            <button data-filter="active">Đang làm</button>
+            <button data-filter="done">Hoàn thành</button>
+          </div>
+
+          <div class="toolbar-right">
+            <label class="select">
+              <span>Sắp xếp</span>
+              <select id="sortSelect">
+                <option value="manual">Thủ công (kéo thả)</option>
+                <option value="due">Theo hạn chót</option>
+                <option value="priority">Theo mức ưu tiên</option>
+                <option value="newest">Mới nhất</option>
+              </select>
+            </label>
+            <button class="btn ghost" id="clearDone"><svg class="icon"><use href="#i-trash"/></svg><span>Dọn việc đã xong</span></button>
+          </div>
+        </div>
+
+        <div class="chips" id="catChips" aria-label="Lọc theo danh mục">
+          <button class="chip-btn active" data-cat="all">Mọi danh mục</button>
+          <button class="chip-btn" data-cat="work"><i class="dot" style="--c:#4f8fc0"></i>Công việc</button>
+          <button class="chip-btn" data-cat="study"><i class="dot" style="--c:#c29a3c"></i>Học tập</button>
+          <button class="chip-btn" data-cat="personal"><i class="dot" style="--c:#a4789e"></i>Cá nhân</button>
+          <button class="chip-btn" data-cat="health"><i class="dot" style="--c:#4e9a72"></i>Sức khỏe</button>
+        </div>
+
+        <form class="quick-add" id="quickForm" autocomplete="off">
+          <svg class="icon"><use href="#i-plus"/></svg>
+          <input type="text" id="quickInput" placeholder="Thêm nhanh một việc rồi nhấn Enter…" maxlength="120" aria-label="Thêm nhanh công việc">
+        </form>
+
+        <ul class="task-list" id="taskList"></ul>
+
+        <div class="empty" id="emptyTasks" hidden>
+          <div class="empty-ico"><svg class="icon"><use href="#i-check-circle"/></svg></div>
+          <h3>Chưa có việc nào ở đây</h3>
+          <p>Thêm một việc mới hoặc đổi bộ lọc để xem các mục khác.</p>
+          <button class="btn primary" data-open-modal>Thêm việc đầu tiên</button>
+        </div>
+      </section>
+
+      <!-- ===== VIEW: POMODORO ===== -->
+      <section class="view" id="view-pomodoro">
+        <div class="page-head">
+          <h1>Tập trung sâu</h1>
+          <p>Làm việc theo từng phiên ngắn, nghỉ đúng lúc để giữ nhịp ổn định.</p>
+        </div>
+
+        <div class="pomo-wrap">
+          <article class="card pomo-card" id="pomoCard" data-mode="focus">
+            <div class="seg" id="modeSeg" aria-label="Chế độ">
+              <span class="seg-indicator"></span>
+              <button class="active" data-mode="focus">Tập trung</button>
+              <button data-mode="short">Nghỉ ngắn</button>
+              <button data-mode="long">Nghỉ dài</button>
+            </div>
+
+            <div class="pomo-ring">
+              <svg viewBox="0 0 280 280" aria-hidden="true">
+                <circle class="pr-bg" cx="140" cy="140" r="126"/>
+                <circle class="pr-fg" id="pomoRing" cx="140" cy="140" r="126"/>
+              </svg>
+              <div class="pomo-center">
+                <span class="pomo-time" id="pomoTime" role="timer">25:00</span>
+                <span class="pomo-label" id="pomoLabel">Sẵn sàng tập trung</span>
+              </div>
+            </div>
+
+            <div class="pomo-controls">
+              <button class="round-btn" id="pomoReset" aria-label="Đặt lại"><svg class="icon"><use href="#i-reset"/></svg></button>
+              <button class="round-btn big" id="pomoToggle" aria-label="Bắt đầu"><svg class="icon"><use href="#i-play"/></svg></button>
+              <button class="round-btn" id="pomoSkip" aria-label="Bỏ qua"><svg class="icon"><use href="#i-skip"/></svg></button>
+            </div>
+
+            <div class="pomo-dots" id="pomoDots" aria-label="Tiến độ chu kỳ">
+              <i></i><i></i><i></i><i></i>
+            </div>
+          </article>
+
+          <div class="pomo-side">
+            <article class="card side-card">
+              <h2>Đang tập trung vào</h2>
+              <label class="select block">
+                <select id="pomoTask" aria-label="Chọn công việc"></select>
+              </label>
+              <p class="hint">Mỗi phiên hoàn thành sẽ được ghi vào việc bạn chọn.</p>
+            </article>
+
+            <article class="card side-card">
+              <h2>Thời lượng</h2>
+              <div class="stepper">
+                <button class="round-btn sm" id="pomoMinus" aria-label="Giảm"><svg class="icon"><use href="#i-minus"/></svg></button>
+                <div><strong id="pomoDurVal">25</strong><span>phút</span></div>
+                <button class="round-btn sm" id="pomoPlus" aria-label="Tăng"><svg class="icon"><use href="#i-plus"/></svg></button>
+              </div>
+            </article>
+
+            <article class="card side-card two">
+              <div><strong id="pomoSessions">0</strong><span>phiên hôm nay</span></div>
+              <div><strong id="pomoMinutes">0</strong><span>phút tập trung</span></div>
+            </article>
+
+            <p class="shortcut-hint">Nhấn <kbd>Space</kbd> để bắt đầu hoặc tạm dừng.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== VIEW: GHI CHÚ ===== -->
+      <section class="view" id="view-notes">
+        <div class="page-head row">
+          <div>
+            <h1>Ghi chú nhanh</h1>
+            <p>Ý tưởng, đường dẫn, việc cần nhớ — tự động lưu khi bạn gõ.</p>
+          </div>
+          <button class="btn primary" id="addNote"><svg class="icon"><use href="#i-plus"/></svg><span>Ghi chú mới</span></button>
+        </div>
+        <div class="notes-grid" id="notesGrid"></div>
+        <div class="empty" id="emptyNotes" hidden>
+          <div class="empty-ico"><svg class="icon"><use href="#i-note"/></svg></div>
+          <h3>Chưa có ghi chú nào</h3>
+          <p>Tạo ghi chú đầu tiên để lưu lại điều bạn không muốn quên.</p>
+        </div>
+      </section>
+
+      <!-- ===== VIEW: THỐNG KÊ ===== -->
+      <section class="view" id="view-insights">
+        <div class="page-head">
+          <h1>Thống kê</h1>
+          <p>Nhìn lại 7 ngày gần nhất để biết nhịp làm việc của bạn.</p>
+        </div>
+
+        <div class="kpis">
+          <article class="card kpi"><span class="stat-ico warn"><svg class="icon"><use href="#i-flame"/></svg></span><strong id="kStreak">0</strong><span class="stat-label">ngày liên tiếp</span></article>
+          <article class="card kpi"><span class="stat-ico"><svg class="icon"><use href="#i-timer"/></svg></span><strong id="kFocus">0</strong><span class="stat-label">phút tập trung hôm nay</span></article>
+          <article class="card kpi"><span class="stat-ico ok"><svg class="icon"><use href="#i-check-circle"/></svg></span><strong id="kWeek">0</strong><span class="stat-label">việc xong tuần này</span></article>
+          <article class="card kpi"><span class="stat-ico"><svg class="icon"><use href="#i-target"/></svg></span><strong id="kRate">0</strong><span class="stat-label">% tỷ lệ hoàn thành</span></article>
+        </div>
+
+        <div class="charts">
+          <article class="card chart-card">
+            <h2>Việc hoàn thành</h2>
+            <div class="bars" id="barsTasks"></div>
+          </article>
+          <article class="card chart-card">
+            <h2>Phút tập trung</h2>
+            <div class="bars alt" id="barsFocus"></div>
+          </article>
+          <article class="card chart-card wide">
+            <h2>Theo danh mục</h2>
+            <div class="cat-list" id="catList"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ========== MODAL THÊM / SỬA VIỆC ========== -->
+  <div class="modal-backdrop" id="modal" aria-hidden="true">
+    <form class="modal" id="taskForm" role="dialog" aria-modal="true" aria-labelledby="modalTitle" novalidate>
+      <div class="modal-head">
+        <h2 id="modalTitle">Thêm công việc mới</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Đóng"><svg class="icon"><use href="#i-x"/></svg></button>
+      </div>
+
+      <div class="field">
+        <label for="fTitle">Tên công việc</label>
+        <input type="text" id="fTitle" maxlength="120" placeholder="Ví dụ: Hoàn thiện bản thiết kế" autocomplete="off">
+        <small class="err" id="fTitleErr" hidden>Hãy nhập tên công việc.</small>
+      </div>
+
+      <div class="field">
+        <label for="fDesc">Mô tả</label>
+        <textarea id="fDesc" rows="3" maxlength="300" placeholder="Ghi chú thêm nếu cần (không bắt buộc)"></textarea>
+      </div>
+
+      <div class="field">
+        <span class="label">Mức ưu tiên</span>
+        <div class="radio-seg" role="radiogroup">
+          <label><input type="radio" name="priority" value="low"><span>Thấp</span></label>
+          <label><input type="radio" name="priority" value="medium" checked><span>Trung bình</span></label>
+          <label><input type="radio" name="priority" value="high"><span>Cao</span></label>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="fCat">Danh mục</label>
+          <select id="fCat">
+            <option value="work">Công việc</option>
+            <option value="study">Học tập</option>
+            <option value="personal">Cá nhân</option>
+            <option value="health">Sức khỏe</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fDue">Hạn chót</label>
+          <input type="date" id="fDue">
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn ghost" data-close>Hủy</button>
+        <button type="submit" class="btn primary" id="saveBtn">Lưu công việc</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <script src="js.js"></script>
+</body>
+</html>
