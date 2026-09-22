@@ -571,12 +571,68 @@
     setCategory(b.dataset.cat);
     renderTasks({ animate: true });
   });
-  $('#sortSelect').value = state.sort;
-  $('#sortSelect').addEventListener('change', (e) => {
+  const sortSelect = $('#sortSelect');
+  const sortTrigger = $('#sortTrigger');
+  const sortValue = $('#sortValue');
+  const sortMenu = $('#sortMenu');
+  const sortOptions = $$('[data-sort]', sortMenu);
+
+  function syncSortMenu() {
+    sortValue.textContent = sortSelect.selectedOptions[0].textContent;
+    sortOptions.forEach((option) => option.setAttribute('aria-selected', String(option.dataset.sort === sortSelect.value)));
+  }
+  function closeSortMenu(restoreFocus = false) {
+    sortMenu.hidden = true;
+    sortTrigger.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) sortTrigger.focus();
+  }
+  function openSortMenu(focusOption = false) {
+    sortMenu.hidden = false;
+    sortTrigger.setAttribute('aria-expanded', 'true');
+    if (focusOption) sortOptions.find((option) => option.dataset.sort === sortSelect.value).focus();
+  }
+  function chooseSort(option) {
+    sortSelect.value = option.dataset.sort;
+    sortSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    closeSortMenu(true);
+  }
+
+  sortSelect.value = state.sort;
+  if (!sortSelect.value) sortSelect.value = 'manual';
+  syncSortMenu();
+  sortSelect.addEventListener('change', (e) => {
     state.sort = e.target.value;
     store.set('sort', state.sort);
     scheduleBackendSave();
     renderTasks({ flip: true });
+    syncSortMenu();
+  });
+  sortTrigger.addEventListener('click', () => sortMenu.hidden ? openSortMenu() : closeSortMenu());
+  sortTrigger.addEventListener('keydown', (e) => {
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) {
+      e.preventDefault();
+      openSortMenu();
+      const index = e.key === 'End' ? sortOptions.length - 1 : e.key === 'Home' ? 0 : sortOptions.findIndex((option) => option.dataset.sort === sortSelect.value);
+      sortOptions[index].focus();
+    }
+  });
+  sortMenu.addEventListener('click', (e) => {
+    const option = e.target.closest('[data-sort]');
+    if (option) chooseSort(option);
+  });
+  sortMenu.addEventListener('keydown', (e) => {
+    const index = sortOptions.indexOf(document.activeElement);
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeSortMenu(true);
+    } else if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) {
+      e.preventDefault();
+      const next = e.key === 'Home' ? 0 : e.key === 'End' ? sortOptions.length - 1 : (index + (e.key === 'ArrowDown' ? 1 : -1) + sortOptions.length) % sortOptions.length;
+      sortOptions[next].focus();
+    }
+  });
+  document.addEventListener('pointerdown', (e) => {
+    if (!sortMenu.hidden && !sortTrigger.parentElement.contains(e.target)) closeSortMenu();
   });
   $('#clearDone').addEventListener('click', clearCompleted);
 
@@ -605,6 +661,7 @@
     const done = tasks.filter((t) => t.done).length;
     const active = total - done;
     const overdue = tasks.filter((t) => !t.done && t.due && dueInfo(t.due).diff < 0).length;
+    const dueToday = tasks.filter((t) => !t.done && t.due && dueInfo(t.due).diff === 0).length;
     const pct = total ? Math.round((done / total) * 100) : 0;
 
     countTo($('#statTotal'), total);
@@ -615,10 +672,25 @@
     ringFg.style.strokeDashoffset = RING_C * (1 - pct / 100);
     $('#ringSub').textContent = `${done} / ${total} việc hoàn thành`;
 
-    $('#progressText').textContent = !total
-      ? 'Danh sách đang trống. Hãy thêm việc đầu tiên của bạn.'
-      : active === 0 ? 'Mọi việc đã xong. Bạn có thể nghỉ ngơi rồi.'
-      : `Bạn còn ${active} việc đang chờ${overdue ? `, trong đó ${overdue} việc đã quá hạn` : ''}.`;
+    let headline, progress;
+    if (!total) {
+      headline = 'Một mục tiêu mới bắt đầu ở đây.';
+      progress = 'Thêm việc đầu tiên để lên kế hoạch cho hôm nay.';
+    } else if (active === 0) {
+      headline = 'Bạn đã hoàn thành mọi việc.';
+      progress = 'Danh sách đã xong. Hãy nghỉ ngơi hoặc chuẩn bị việc tiếp theo.';
+    } else if (overdue) {
+      headline = 'Ưu tiên việc đang quá hạn.';
+      progress = `${overdue} việc quá hạn trong ${active} việc chưa xong. Bắt đầu từ việc gần nhất.`;
+    } else if (dueToday) {
+      headline = 'Hôm nay, giải quyết việc cần làm.';
+      progress = `Bạn có ${dueToday} việc đến hạn hôm nay. Chọn một việc và bắt đầu.`;
+    } else {
+      headline = 'Bắt đầu từ việc quan trọng nhất.';
+      progress = `${active} việc đang chờ. Chọn một việc và dành 25 phút tập trung.`;
+    }
+    $('#greeting').textContent = headline;
+    $('#progressText').textContent = progress;
 
     const badge = $('#navBadge');
     if (badge.textContent !== String(active)) {
@@ -1078,20 +1150,10 @@
     setTimeout(() => root.classList.remove('theme-switching'), 600);
   });
 
-  function greeting() {
-    const h = new Date().getHours();
-    if (h < 5) return 'Khuya rồi, nghỉ sớm nhé';
-    if (h < 11) return 'Chào buổi sáng';
-    if (h < 14) return 'Chào buổi trưa';
-    if (h < 18) return 'Chào buổi chiều';
-    return 'Chào buổi tối';
-  }
-
   function tickClock() {
     const now = new Date();
     $('#clockTime').textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
     $('#clockDate').textContent = now.toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long' });
-    $('#greeting').textContent = greeting();
   }
 
   /* ==========================================================

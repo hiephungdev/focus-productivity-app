@@ -4,7 +4,7 @@
     "databaseName": "focus_app_database",
     "description": "File BE dung de luu toan bo du lieu that cua website Focus.",
     "createdAt": "2026-09-20T16:17:58.553Z",
-    "updatedAt": "2026-09-20T16:41:53.338Z"
+    "updatedAt": "2026-09-22T07:44:15.242Z"
   },
   "appSettings": {
     "appName": "Focus",
@@ -80,7 +80,7 @@
   "tasks": [
     {
       "id": "kocbhbh0vk5",
-      "title": "Học tiếng anh",
+      "title": "H\u1ECDc ti\u1EBFng anh",
       "desc": "",
       "priority": "medium",
       "category": "study",
@@ -106,10 +106,10 @@
       "isRunning": false,
       "remainingSeconds": 1500,
       "cycle": 0,
-      "selectedTaskId": "kocbhbh0vk5",
+      "selectedTaskId": null,
       "startedAt": null,
       "endedAt": null,
-      "updatedAt": "2026-09-20T16:41:53.336Z"
+      "updatedAt": "2026-09-22T07:44:15.240Z"
     },
     "sessions": []
   },
@@ -124,12 +124,12 @@
       "totalTasks": 1,
       "completedTasks": 0,
       "activeTasks": 1,
-      "overdueTasks": 0,
+      "overdueTasks": 1,
       "completionRate": 0,
       "currentStreak": 0,
       "todayFocusMinutes": 0,
       "todayFocusSessions": 0,
-      "updatedAt": "2026-09-20T16:41:53.336Z"
+      "updatedAt": "2026-09-22T07:44:15.240Z"
     },
     "byCategory": [],
     "byDay": []
